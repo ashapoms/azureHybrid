@@ -37,8 +37,8 @@ Param(
 	[string] $ResourceGroupLocation = "westeurope",
 	[string] $DeployIndex = "101",
 	[string] $ResourceGroupPrefix = "Test-RG",
-	[string] $AzureUserName = "andvis@contosomsspb.onmicrosoft.com",
-	[string] $AzureUserPassword = "@zureSt@ck"
+	[string] $AzureUserName = "admin@mytenant.onmicrosoft.com",
+	[string] $AzureUserPassword = "password"
 )
 
 # Prepare credentials and login to Azure subscription. 

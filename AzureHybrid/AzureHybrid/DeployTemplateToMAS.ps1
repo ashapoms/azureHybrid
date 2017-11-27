@@ -37,8 +37,8 @@ Param(
 	[string] $ResourceGroupLocation = "local",
 	[string] $DeployIndex = "101",
 	[string] $ResourceGroupPrefix = "Test-RG",
-	[string] $AzureUserName = "andvis@contosomsspb.onmicrosoft.com",
-	[string] $AzureUserPassword = "@zureSt@ck"
+	[string] $AzureUserName = "admin@mytenant.onmicrosoft.com",
+	[string] $AzureUserPassword = "password"
 )
 
 # Change to the tools directory
@@ -52,14 +52,9 @@ Add-AzureRMEnvironment `
   -Name "AzureStackUser" `
   -ArmEndpoint "https://management.local.azurestack.external"
 
-# Set the GraphEndpointResourceId value
-# Set-AzureRmEnvironment `
-#  -Name "AzureStackUser" `
-#  -GraphAudience "https://graph.windows.net/"
-
 # Get the Active Directory tenantId that is used to deploy Azure Stack
 $TenantID = Get-AzsDirectoryTenantId `
-  -AADTenantName "contosomsspb.onmicrosoft.com" `
+  -AADTenantName "mytenant.onmicrosoft.com" `
   -EnvironmentName "AzureStackUser"
 
 # Prepare credentials and login to Azure subscription. 
