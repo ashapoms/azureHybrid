@@ -1,6 +1,6 @@
 ﻿<#############################################################
  #                                                           #
- # DeployTemplate.ps1										 #
+ # DeployTemplateToMAS.ps1									 #
  #                                                           #
  #############################################################>
 
@@ -9,9 +9,9 @@
 	The script creates a new resource group in Azure Stack subscription and deploys resources based on template file and parameters file.
 
  .Requirements
-	Azure PowerShell modules must be installed in order to run the script (https://www.microsoft.com/web/handlers/webpi.ashx/getinstaller/WindowsAzurePowershellGet.3f.3f.3fnew.appids).
+	Azure Stack PowerShell modules must be installed in order to run the script (https://docs.microsoft.com/en-us/azure/azure-stack/azure-stack-powershell-install).
  .Parameter ResourceGroupLocation
-	Sets Azure region for the deployment. Default region is 'westeurope'.
+	Sets Azure Stack region for the deployment. Default region is 'local'.
  .Parameter DeployIndex
 	Sets a number for the deployment iteration.
  .Parameter ResourceGroupPrefix
@@ -24,19 +24,19 @@
 .Example
      If no parameters are provided, default values are used.
 
-     .\DeployTemplate.ps1 
+     .\DeployTemplateToMAS.ps1 
 
 .Example
-     This example creates 'Open-RG02' resource group in West Europe region and starts deployment with the name 'Open-RG-Dep02'.
+     This example creates 'Test-RG02' resource group in local region and starts deployment with the name 'Test-RG-Dep02'.
 
-     .\DeployTemplate.ps1 -ResourceGroupLocation 'westeurope' -DeployIndex '02' -ResourceGroupPrefix 'Open-RG' -AzureUserName 'admin@mytenant.onmicrosoft.com' -AzureUserPassword 'P@ssw0rd!@#$%' 
+     .\DeployTemplateToMAS.ps1 -ResourceGroupLocation 'local' -DeployIndex '02' -ResourceGroupPrefix 'Test-RG' -AzureUserName 'admin@mytenant.onmicrosoft.com' -AzureUserPassword 'P@ssw0rd!@#$%' 
 #>
 
 
 Param(
 	[string] $ResourceGroupLocation = "local",
 	[string] $DeployIndex = "101",
-	[string] $ResourceGroupPrefix = "MktgDev-RG",
+	[string] $ResourceGroupPrefix = "Test-RG",
 	[string] $AzureUserName = "andvis@contosomsspb.onmicrosoft.com",
 	[string] $AzureUserPassword = "@zureSt@ck"
 )
@@ -53,9 +53,9 @@ Add-AzureRMEnvironment `
   -ArmEndpoint "https://management.local.azurestack.external"
 
 # Set the GraphEndpointResourceId value
-Set-AzureRmEnvironment `
-  -Name "AzureStackUser" `
-  -GraphAudience "https://graph.windows.net/"
+# Set-AzureRmEnvironment `
+#  -Name "AzureStackUser" `
+#  -GraphAudience "https://graph.windows.net/"
 
 # Get the Active Directory tenantId that is used to deploy Azure Stack
 $TenantID = Get-AzsDirectoryTenantId `
@@ -75,8 +75,8 @@ Login-AzureRmAccount `
 # Prepare environment variables.  
 $ResourceGroupName = $ResourceGroupPrefix + $DeployIndex
 $DeploymentName = $ResourceGroupPrefix + "-Dep" + $DeployIndex
-$TemplateFile = "E:\Distr\DevCon201706-master\MAS-ARM\MAS-ARM\azureHybrid.json"
-$TemplateParametersFile = "E:\Distr\DevCon201706-master\MAS-ARM\MAS-ARM\azureHybrid.parameters.json"
+$TemplateUri = "https://raw.githubusercontent.com/ashapoms/azureHybrid/master/AzureHybrid/AzureHybrid/azureHybrid.json"
+$TemplateParameterUri = "https://raw.githubusercontent.com/ashapoms/azureHybrid/master/AzureHybrid/AzureHybrid/azureHybrid.parameters.json"
 
 # Create a new resource group in given region.  
 New-AzureRmResourceGroup -Name $ResourceGroupName -Location $ResourceGroupLocation -Verbose -Force
@@ -84,6 +84,6 @@ New-AzureRmResourceGroup -Name $ResourceGroupName -Location $ResourceGroupLocati
 # Start a new deployment in created resource group using local files.
 New-AzureRmResourceGroupDeployment -Name $DeploymentName `
                                        -ResourceGroupName $ResourceGroupName `
-                                       -TemplateFile $TemplateFile `
-                                       -TemplateParameterFile $TemplateParametersFile `
+                                       -TemplateUri $TemplateUri `
+                                       -TemplateParameterUri $TemplateParameterUri `
                                        -Verbose 
