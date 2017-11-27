@@ -59,5 +59,5 @@ New-AzureRmResourceGroup -Name $ResourceGroupName -Location $ResourceGroupLocati
 New-AzureRmResourceGroupDeployment -Name $DeploymentName `
                                        -ResourceGroupName $ResourceGroupName `
                                        -TemplateUri $TemplateUri `
-                                       -TemplateParameterUri $TemplateParametersUri `
+                                       -TemplateParameterUri $TemplateParameterUri `
                                        -Verbose
