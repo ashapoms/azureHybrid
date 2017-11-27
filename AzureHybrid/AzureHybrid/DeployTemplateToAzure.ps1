@@ -1,6 +1,6 @@
 <#############################################################
  #                                                           #
- # DeployTemplateToAzure.ps1										 #
+ # DeployTemplateToAzure.ps1								 #
  #                                                           #
  #############################################################>
 
@@ -49,8 +49,8 @@ Login-AzureRmAccount -Credential $AadCred
 # Prepare environment variables.  
 $ResourceGroupName = $ResourceGroupPrefix + $DeployIndex
 $DeploymentName = $ResourceGroupPrefix + "-Dep" + $DeployIndex
-$TemplateUri = ""
-$TemplateParameterUri = ""
+$TemplateUri = "https://raw.githubusercontent.com/ashapoms/azureHybrid/master/AzureHybrid/AzureHybrid/azureHybrid.json"
+$TemplateParameterUri = "https://raw.githubusercontent.com/ashapoms/azureHybrid/master/AzureHybrid/AzureHybrid/azureHybrid.parameters.json"
 
 # Create a new resource group in given region.  
 New-AzureRmResourceGroup -Name $ResourceGroupName -Location $ResourceGroupLocation -Verbose -Force
